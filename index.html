@@ -598,6 +598,14 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 		</section>
 				<section class="elementor-section elementor-top-section elementor-element elementor-element-2f21e60a presti-sedes-section" id="Ubi">
 			<style>
+						.presti-exclamation { display: inline-block; transform: translateY(0.12em); }
+						#Info, #Ubi, #Contacto { scroll-margin-top: 140px; }
+						.elementor-element-6a57228 .elementor-widget-image img { display: inline-block; max-width: 100%; height: auto; visibility: visible; opacity: 1; }
+						.elementor-element-6a57228 .elementor-widget-image img { display: block !important; width: 464px !important; height: 464px !important; max-width: 100% !important; border-radius: 50% !important; object-fit: cover !important; }
+						.elementor-element-6a57228 .elementor-widget-image { content-visibility: visible; }
+						.elementor-element-6a57228 { color-scheme: light; }
+						@media (min-width: 768px) { .elementor-element-6a57228 > .elementor-container { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; max-width: 1200px !important; margin: 0 auto !important; } .elementor-element-6a57228 > .elementor-container > .elementor-column { flex: 0 0 50% !important; width: 50% !important; } .elementor-element-6a57228 .elementor-widget-image { text-align: center !important; } }
+						@media (max-width: 767px) { .elementor-element-6a57228 > .elementor-container { display: flex !important; flex-direction: column !important; align-items: stretch !important; } .elementor-element-6a57228 > .elementor-container > .elementor-column { width: 100% !important; } .elementor-element-6a57228 .elementor-widget-image img { width: calc(100vw - 35px) !important; height: calc(100vw - 35px) !important; } }
 				.presti-sedes-section { background: #eef5c9; }
 				.presti-sedes-grid { display: grid !important; width: 100%; max-width: 1160px !important; box-sizing: border-box; grid-auto-rows: 305px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 54px 18px; margin: 0 auto; padding: 62px 20px 40px; }
 				.presti-sede { box-sizing: border-box; display: flex; position: relative; width: 100%; min-width: 0; height: 100%; flex-direction: column; align-items: center; justify-content: flex-start; padding: 63px 30px 18px; text-align: center; background: #ffffff; border: 0; border-radius: 0; box-shadow: none; }
@@ -879,6 +887,54 @@ var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof H
 </script>
 <div data-pafe-ajax-url="https://presti.com.ar/wp-admin/admin-ajax.php"></div>
  
-
-
+<script>
+	(function () {
+		var image = document.querySelector('.elementor-element-6a57228 .elementor-widget-image img');
+		if (!image) return;
+		image.removeAttribute('srcset');
+		image.removeAttribute('sizes');
+		image.src = './creditos-presti_files/20mil.jpg';
+	})();
+</script>
+<script>
+	(function () {
+		var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+		var textNodes = [];
+		var node;
+		while (node = walker.nextNode()) {
+			if (node.parentElement && !node.parentElement.closest('script, style, textarea')) {
+				textNodes.push(node);
+			}
+		}
+		textNodes.forEach(function (textNode) {
+			if (textNode.nodeValue.indexOf('¡') === -1) return;
+			var fragment = document.createDocumentFragment();
+			textNode.nodeValue.split('¡').forEach(function (part, index) {
+				if (index) {
+					var mark = document.createElement('span');
+					mark.className = 'presti-exclamation';
+					mark.textContent = '¡';
+					fragment.appendChild(mark);
+				}
+				if (part) fragment.appendChild(document.createTextNode(part));
+			});
+			textNode.parentNode.replaceChild(fragment, textNode);
+		});
+	})();
+</script>
+<script>
+	document.addEventListener('click', function (event) {
+		var link = event.target.closest('a[href="#Info"], a[href="#Ubi"], a[href="#Contacto"]');
+		if (!link) return;
+		var target = document.getElementById(link.getAttribute('href').slice(1));
+		if (!target) return;
+		event.preventDefault();
+		history.pushState(null, '', link.getAttribute('href'));
+		var scrollToTarget = function () {
+			window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 140, behavior: 'auto' });
+		};
+		scrollToTarget();
+		window.setTimeout(scrollToTarget, 300);
+	}, true);
+</script>
 </body></html>
